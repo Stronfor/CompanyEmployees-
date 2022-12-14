@@ -3,7 +3,10 @@ import "./employees-list.css";
 
 const EmployeesList = ({ dataServ }) => {
   const elements = dataServ.map((item) => {
-    return <EmployeesListItem {...item} />; // name={item.name} salary={item.salary}
+    const { id, ...itemProps } = item;
+    return (
+      <EmployeesListItem key={id} {...itemProps} /> // name={item.name} salary={item.salary}
+    );
   });
 
   return <ul className="app-list list-group">{elements}</ul>;

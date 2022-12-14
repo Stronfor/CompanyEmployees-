@@ -9,11 +9,10 @@ import "./app.css";
 function App() {
   // Эмитируем сервер для тренировки
   const data = [
-    { name: "John C.", salary: 800, increase: false },
-    { name: "Alex M.", salary: 3000, increase: false },
-    { name: "Sergio K.", salary: 5000, increase: true },
+    { name: "John C.", salary: 800, increase: false, id: 1 },
+    { name: "Alex M.", salary: 3000, increase: false, id: 2 },
+    { name: "Sergio K.", salary: 5000, increase: true, id: 3 },
   ];
-
   return (
     <div className="app">
       <AppInfo />
