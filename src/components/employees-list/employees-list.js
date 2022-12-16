@@ -1,11 +1,17 @@
 import EmployeesListItem from "../employees-list-item/employees-list-item";
 import "./employees-list.css";
 
-const EmployeesList = ({ dataServ }) => {
+const EmployeesList = ({ dataServ, onDelete }) => {
   const elements = dataServ.map((item) => {
     const { id, ...itemProps } = item;
     return (
-      <EmployeesListItem key={id} {...itemProps} /> // name={item.name} salary={item.salary}
+      <EmployeesListItem
+        key={id}
+        {...itemProps} // name={item.name} salary={item.salary}
+        onDelete={() => {
+          onDelete(id);
+        }}
+      />
     );
   });
 

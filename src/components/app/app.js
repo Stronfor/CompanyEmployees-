@@ -1,3 +1,5 @@
+import { Component } from "react";
+
 import AppInfo from "../app-info/app-info";
 import SearchPanel from "../search-panel/search-panel";
 import AppFilter from "../app-filter/app-filter";
@@ -6,27 +8,58 @@ import EmployeesAddForm from "../employees-add-form/employees-add-form";
 
 import "./app.css";
 
-function App() {
-  // Эмитируем сервер для тренировки
-  const data = [
-    { name: "John C.", salary: 800, increase: false, id: 1 },
-    { name: "Alex M.", salary: 3000, increase: false, id: 2 },
-    { name: "Sergio K.", salary: 5000, increase: true, id: 3 },
-  ];
-  return (
-    <div className="app">
-      <AppInfo />
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [
+        // Эмитируем сервер для тренировки
+        { name: "John C.", salary: 800, increase: false, id: 1 },
+        { name: "Alex M.", salary: 3000, increase: false, id: 2 },
+        { name: "Sergio K.", salary: 5000, increase: true, id: 3 },
+      ],
+    };
+    this.maxId = 4;
+  }
 
-      <div className="search-panel">
-        <SearchPanel />
-        <AppFilter />
+  deleteItem = (id) => {
+    this.setState(({ data }) => {
+      return {
+        //в react мы не можен на прямую изменить исходные данные...
+        //создаем его копию в таком виде в котором нам нужно
+
+        data: data.filter((item) => item.id !== id),
+      };
+    });
+  };
+
+  addItem = (name, salary) => {
+    const newItem = { name, salary, increase: false, id: this.maxId++ };
+
+    this.setState(({ data }) => {
+      const newArr = [...data, newItem];
+      return {
+        data: newArr,
+      };
+    });
+  };
+
+  render() {
+    return (
+      <div className="app">
+        <AppInfo />
+
+        <div className="search-panel">
+          <SearchPanel />
+          <AppFilter />
+        </div>
+
+        <EmployeesList dataServ={this.state.data} onDelete={this.deleteItem} />
+
+        <EmployeesAddForm onAdd={this.addItem} />
       </div>
-
-      <EmployeesList dataServ={data} />
-
-      <EmployeesAddForm />
-    </div>
-  );
+    );
+  }
 }
 
 export default App;
