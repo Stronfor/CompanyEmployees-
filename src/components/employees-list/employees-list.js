@@ -1,7 +1,7 @@
 import EmployeesListItem from "../employees-list-item/employees-list-item";
 import "./employees-list.css";
 
-const EmployeesList = ({ dataServ, onDelete }) => {
+const EmployeesList = ({ dataServ, onDelete, onToggleProp }) => {
   const elements = dataServ.map((item) => {
     const { id, ...itemProps } = item;
     return (
@@ -11,6 +11,9 @@ const EmployeesList = ({ dataServ, onDelete }) => {
         onDelete={() => {
           onDelete(id);
         }}
+        onToggleProp={(e) =>
+          onToggleProp(id, e.currentTarget.getAttribute("data-toggle"))
+        }
       />
     );
   });

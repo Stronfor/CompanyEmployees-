@@ -14,9 +14,9 @@ class App extends Component {
     this.state = {
       data: [
         // Эмитируем сервер для тренировки
-        { name: "John C.", salary: 800, increase: false, id: 1 },
-        { name: "Alex M.", salary: 3000, increase: false, id: 2 },
-        { name: "Sergio K.", salary: 5000, increase: true, id: 3 },
+        { name: "John C.", salary: 800, increase: false, like: true, id: 1 },
+        { name: "Alex M.", salary: 3000, increase: false, like: false, id: 2 },
+        { name: "Sergio K.", salary: 5000, increase: true, like: false, id: 3 },
       ],
     };
     this.maxId = 4;
@@ -34,7 +34,13 @@ class App extends Component {
   };
 
   addItem = (name, salary) => {
-    const newItem = { name, salary, increase: false, id: this.maxId++ };
+    const newItem = {
+      name,
+      salary,
+      increase: false,
+      like: false,
+      id: this.maxId++,
+    };
 
     this.setState(({ data }) => {
       const newArr = [...data, newItem];
@@ -44,17 +50,60 @@ class App extends Component {
     });
   };
 
+  // onToggleIncrease = (id) => {
+  //   this.setState(({ data }) => ({
+  //     data: data.map((item) => {
+  //       if (item.id === id) {
+  //         return { ...item, increase: !item.increase };
+  //       }
+  //       return item;
+  //     }),
+  //   }));
+  // };
+
+  onToggleProp = (id, prop) => {
+    this.setState(({ data }) => ({
+      data: data.map((item) => {
+        if (item.id === id) {
+          return { ...item, [prop]: !item[prop] };
+        }
+        return item;
+      }),
+    }));
+  };
+
+  // onToggleRise = (id) => {
+  //   this.setState(({ data }) => ({
+  //     data: data.map((item) => {
+  //       if (item.id === id) {
+  //         return { ...item, like: !item.like };
+  //       }
+  //       return item;
+  //     }),
+  //   }));
+  // };
+
   render() {
+    // подсчет количества сотрудников
+    const employees = this.state.data.length;
+    // подсчет количества ПРЕМИЙ
+    const rise = this.state.data.filter(
+      (item) => item.increase === true
+    ).length;
     return (
       <div className="app">
-        <AppInfo />
+        <AppInfo numberEmp={employees} numberRise={rise} />
 
         <div className="search-panel">
           <SearchPanel />
           <AppFilter />
         </div>
 
-        <EmployeesList dataServ={this.state.data} onDelete={this.deleteItem} />
+        <EmployeesList
+          dataServ={this.state.data}
+          onDelete={this.deleteItem}
+          onToggleProp={this.onToggleProp}
+        />
 
         <EmployeesAddForm onAdd={this.addItem} />
       </div>
