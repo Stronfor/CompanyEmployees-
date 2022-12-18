@@ -19,6 +19,7 @@ class App extends Component {
         { name: "Sergio K.", salary: 5000, increase: true, like: false, id: 3 },
       ],
       term: "", // string for searching
+      filter: "tutti",
     };
     this.maxId = 4;
   }
@@ -90,9 +91,7 @@ class App extends Component {
       return items;
     }
 
-    return items.filter((item) => {
-      return item.name.indexOf(term) > -1;
-    });
+    return items.filter((item) => item.name.indexOf(term) > -1);
   };
 
   // новый метод для того чтобы поднять состояние term из компонента search-panel
@@ -100,8 +99,27 @@ class App extends Component {
     this.setState({ term: term });
   };
 
+  // ==> FILTER
+  // UP STATE
+  getUpFilter = (filterUp) => {
+    this.setState({ filter: filterUp });
+  };
+
+  //
+  filterEmp = (emp, filterAtr) => {
+    if (filterAtr === "tutti") {
+      return emp;
+    }
+    if (filterAtr === "Aumento") {
+      return emp.filter((item) => item.increase === true);
+    }
+    if (filterAtr === "1000") {
+      return emp.filter((item) => item.salary >= 1000);
+    }
+  };
+
   render() {
-    const { data, term } = this.state;
+    const { data, term, filter } = this.state;
     // подсчет количества сотрудников
     const employees = data.length;
     // подсчет количества ПРЕМИЙ
@@ -109,17 +127,19 @@ class App extends Component {
     // сохранянем отфильтровоные данные(не передаю на прямую функцию чтоб не перерисовывать интерфейс если нет изменений)
     const visibleData = this.searchEmp(data, term);
 
+    const visibleFilter = this.filterEmp(data, filter);
+
     return (
       <div className="app">
         <AppInfo numberEmp={employees} numberRise={rise} />
 
         <div className="search-panel">
           <SearchPanel onUpdateSearch={this.onUpdateSearch} />
-          <AppFilter />
+          <AppFilter getUpFilter={this.getUpFilter} />
         </div>
 
         <EmployeesList
-          dataServ={visibleData}
+          dataServ={visibleFilter}
           onDelete={this.deleteItem}
           onToggleProp={this.onToggleProp}
         />

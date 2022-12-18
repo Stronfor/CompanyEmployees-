@@ -11,10 +11,10 @@ class SearchPanel extends Component {
 
   onUpdateSearchPanel = (e) => {
     //сoбытие чтоб вытащить то что ввел польз
-    const term = e.target.value;
-    this.setState({ term });
+    const termV = e.target.value;
+    this.setState({ term: termV });
     // проброска НАВЕРХ
-    this.props.onUpdateSearch(term);
+    this.props.onUpdateSearch(termV);
   };
 
   render() {
