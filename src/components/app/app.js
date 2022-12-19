@@ -100,22 +100,19 @@ class App extends Component {
   };
 
   // ==> FILTER
-  // UP STATE
-  getUpFilter = (filterUp) => {
-    this.setState({ filter: filterUp });
-  };
-
-  //
   filterEmp = (emp, filterAtr) => {
-    if (filterAtr === "tutti") {
-      return emp;
+    switch (filterAtr) {
+      case "1000":
+        return emp.filter((item) => item.salary > 1000);
+      case "Aumento":
+        return emp.filter((item) => item.like);
+      default:
+        return emp;
     }
-    if (filterAtr === "Aumento") {
-      return emp.filter((item) => item.increase === true);
-    }
-    if (filterAtr === "1000") {
-      return emp.filter((item) => item.salary >= 1000);
-    }
+  };
+  // Up state
+  onFilterSelect = (filterUser) => {
+    this.setState({ filter: filterUser });
   };
 
   render() {
@@ -124,10 +121,8 @@ class App extends Component {
     const employees = data.length;
     // подсчет количества ПРЕМИЙ
     const rise = data.filter((item) => item.increase === true).length;
-    // сохранянем отфильтровоные данные(не передаю на прямую функцию чтоб не перерисовывать интерфейс если нет изменений)
-    const visibleData = this.searchEmp(data, term);
-
-    const visibleFilter = this.filterEmp(data, filter);
+    // сохранянем отфильтровоные данны по поиску + по фильтрам
+    const visibleData = this.filterEmp(this.searchEmp(data, term), filter);
 
     return (
       <div className="app">
@@ -135,11 +130,11 @@ class App extends Component {
 
         <div className="search-panel">
           <SearchPanel onUpdateSearch={this.onUpdateSearch} />
-          <AppFilter getUpFilter={this.getUpFilter} />
+          <AppFilter filter={filter} onFilterSelect={this.onFilterSelect} />
         </div>
 
         <EmployeesList
-          dataServ={visibleFilter}
+          dataServ={visibleData}
           onDelete={this.deleteItem}
           onToggleProp={this.onToggleProp}
         />

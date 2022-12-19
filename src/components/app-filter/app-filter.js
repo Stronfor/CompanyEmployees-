@@ -1,53 +1,31 @@
-import { Component } from "react";
-
 import "./app-filter.css";
 
-class AppFilter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      btnAttribute: "tutti",
-    };
-  }
+const AppFilter = (props) => {
+  //формируем кнопки через массив
+  const buttonsData = [
+    { name: "tutti", label: "Tutti dipendenti" },
+    { name: "Aumento", label: "Aumento" },
+    { name: "1000", label: "Stipendio piu di 1000$" },
+  ];
 
-  filter = (e) => {
-    const btnAttributeCurrent = e.currentTarget.getAttribute("data-atr");
-    this.setState({ btnAttribute: btnAttributeCurrent });
-
-    // UP
-    this.props.getUpFilter(btnAttributeCurrent);
-  };
-
-  render() {
+  const buttons = buttonsData.map(({ name, label }) => {
+    //назначение активного класса
+    const active = props.filter === name; //if(props.filter === name)(true/false)
+    const clazz = active ? "btn-light" : "btn-outline-light";
     return (
-      <div className="btn-group">
-        <button
-          className="btn btn-light"
-          type="button"
-          data-atr="tutti"
-          onClick={this.filter}
-        >
-          Tutti dipendenti
-        </button>
-        <button
-          className="btn btn-outline-light"
-          type="button"
-          data-atr="Aumento"
-          onClick={this.filter}
-        >
-          Aumento
-        </button>
-        <button
-          className="btn btn-outline-light"
-          type="button"
-          data-atr="1000"
-          onClick={this.filter}
-        >
-          Stipendio piu di 1000$
-        </button>
-      </div>
+      <button
+        className={`btn ${clazz}`}
+        type="button"
+        key={name}
+        onClick={() => props.onFilterSelect(name)}
+      >
+        {label}
+      </button>
     );
-  }
-}
+  });
+
+  // отрисовка кнопок
+  return <div className="btn-group">{buttons}</div>;
+};
 
 export default AppFilter;
